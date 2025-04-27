@@ -159,9 +159,9 @@ module Combinators = {
    * and this function maps it to the option type.
    ")
   let option: arbitrary<'a> => arbitrary<option<'a>> = arb =>
-    Derive.map(null(arb), Js.Null.toOption)
+    Derive.map(null(arb), x => Js.Null.toOption(x))
 
-  let list: arbitrary<'a> => arbitrary<list<'a>> = a => Derive.map(array(a), Array.to_list)
+  let list: arbitrary<'a> => arbitrary<list<'a>> = a => Derive.map(array(a), x => List.fromArray(x))
 }
 
 @module("fast-check") external boolean: unit => arbitrary<bool> = "boolean"
@@ -258,7 +258,7 @@ module Objects = {
   external unicodeJsonObject: int => arbitrary<Js.Json.t> = "unicodeJsonObject"
 
   @module("fast-check")
-  external letrec: (((. Js.Dict.key) => arbitrary<any>) => Js.Dict.t<arbitrary<any>>) => Js.Dict.t<
+  external letrec: ((Js.Dict.key => arbitrary<any>) => Js.Dict.t<arbitrary<any>>) => Js.Dict.t<
     arbitrary<any>,
   > = "letrec"
 }
@@ -285,28 +285,28 @@ module Scheduler = {
     " Unfortunately returning a function is just currying, so we have to use the uncurried form here "
   )
   @send
-  external scheduleFunction: (schedulerInstance, 'a => Js.Promise.t<'t>, . 'a) => Js.Promise.t<'t> =
+  external scheduleFunction: (schedulerInstance, 'a => Js.Promise.t<'t>, 'a) => Js.Promise.t<'t> =
     "scheduleFunction"
   @send
   external scheduleFunction2: (
     schedulerInstance,
-    (. 'a, 'b) => Js.Promise.t<'t>,
-    . 'a,
+    ('a, 'b) => Js.Promise.t<'t>,
+    'a,
     'b,
   ) => Js.Promise.t<'t> = "scheduleFunction"
   @send
   external scheduleFunction3: (
     schedulerInstance,
-    (. 'a, 'b, 'c) => Js.Promise.t<'t>,
-    . 'a,
+    ('a, 'b, 'c) => Js.Promise.t<'t>,
+    'a,
     'b,
     'c,
   ) => Js.Promise.t<'t> = "scheduleFunction"
   @send
   external scheduleFunction4: (
     schedulerInstance,
-    (. 'a, 'b, 'c, 'd) => Js.Promise.t<'t>,
-    . 'a,
+    ('a, 'b, 'c, 'd) => Js.Promise.t<'t>,
+    'a,
     'b,
     'c,
     'd,
@@ -314,8 +314,8 @@ module Scheduler = {
   @send
   external scheduleFunction5: (
     schedulerInstance,
-    (. 'a, 'b, 'c, 'd, 'e) => Js.Promise.t<'t>,
-    . 'a,
+    ('a, 'b, 'c, 'd, 'e) => Js.Promise.t<'t>,
+    'a,
     'b,
     'c,
     'd,

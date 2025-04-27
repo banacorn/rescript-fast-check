@@ -5,7 +5,7 @@
   (at least as many as we're able to given it hasn't all been replicated in these bindings)
  */
 
-open RescriptMocha.Mocha
+open Mocha
 open Arbitrary
 open Property.Sync
 open Combinators
@@ -18,34 +18,39 @@ describe("Various simple tests", () => {
   )
 
   it("null(nat)", () =>
-    assertProperty1(null(nat()), n =>
-      switch Js.Null.toOption(n) {
-      | Some(num) => num >= 0
-      | None => true
-      }
+    assertProperty1(
+      Combinators.null(nat()),
+      n =>
+        switch Js.Null.toOption(n) {
+        | Some(num) => num >= 0
+        | None => true
+        },
     )
   )
 
   it("option(nat)", () =>
-    assertProperty1(Combinators.option(nat()), x =>
-      switch x {
-      | Some(num) => num >= 0
-      | None => true
-      }
+    assertProperty1(
+      Combinators.option(nat()),
+      x =>
+        switch x {
+        | Some(num) => num >= 0
+        | None => true
+        },
     )
   )
 
   it("sum of nats is >= 0", () => {
     // clearly jsverify doesn't generate natural numbers close to the maximum JS supports
     // fast-check does so we need to limit it
-    assertProperty1(array(nat(~max=200, ())), a => Array.fold_left(\"+", 0, a) >= 0)
+    assertProperty1(array(nat(~max=200, ())), a => a->Array.reduce(0, \"+") >= 0)
 
-    assertProperty1(list(nat(~max=200, ())), l => List.fold_left(\"+", 0, l) >= 0)
+    assertProperty1(list(nat(~max=200, ())), l => l->List.reduce(0, \"+") >= 0)
   })
 
   it("testing tuple", () =>
-    assertProperty1(tuple2(nat(~max=200, ()), nat(~max=200, ())), ((a, b)) =>
-      a + b >= a && a + b >= b
+    assertProperty1(
+      tuple2(nat(~max=200, ()), nat(~max=200, ())),
+      ((a, b)) => a + b >= a && a + b >= b,
     )
   )
 })

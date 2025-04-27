@@ -1,6 +1,6 @@
 {
   "name": "rescript-fast-check",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "namespace": "fast-check",
   "sources": [
     {
@@ -16,17 +16,24 @@
     }
   ],
   "suffix": ".bs.js",
-  "bs-dev-dependencies": [
-    "rescript-mocha"
-  ],
   "package-specs": [
     {
       "module": "commonjs",
-      "in-source": true
+      "in-source": false
     }
+  ],
+  "bs-dev-dependencies": [
+    "rescript-mocha"
+  ],
+  "bs-dependencies": [
+    "@rescript/core"
   ],
   "warnings": {
     "number": "A-4-41-42-43+101-102",
     "error": true
-  }
+  },
+  "bsc-flags": [
+    "-open RescriptCore",
+    "-bs-g"
+  ]
 }

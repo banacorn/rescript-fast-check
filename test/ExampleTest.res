@@ -1,6 +1,6 @@
 // ported from the fast-check getting started guide
 // https://github.com/dubzzz/fast-check#getting-started
-open RescriptMocha.Mocha
+open Mocha
 
 // open FastCheck;
 open Arbitrary
